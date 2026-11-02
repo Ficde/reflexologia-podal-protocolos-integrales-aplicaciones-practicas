@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espacio de Repaso - MOD 3 PROTOCOLOS INTEGRALES Y APLICACIONES PRÁCTICAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ficde-azul-dark: #134252;
+            --ficde-azul-light: #2c5c6e;
+            --ficde-naranja: #e68161;
+            --ficde-naranja-hover: #ff9f85;
+            --tarjeta-bg: #f0f4f5;
+            --input-bg: #e2e8eb;
+            --texto-principal: #0f2d38;
+            --texto-secundario: #4a636e;
+            --verde-exito: #2e7d32;
+            --verde-bg: #c8e6c9;
+            --rojo-error: #c62828;
+            --naranja-bg: #ffe0b2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--ficde-azul-dark) 0%, #0a252e 100%);
+            min-height: 100vh;
+            color: var(--texto-principal);
+            padding: 20px;
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-img { height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+
+        .module-tag {
+            background: var(--ficde-naranja);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .welcome-card {
+            background: var(--tarjeta-bg);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-bottom: 6px solid var(--ficde-naranja);
+            margin-bottom: 30px;
+        }
+
+        .welcome-title {
+            color: var(--ficde-azul-dark);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .fede-avatar-large {
+            width: 140px; height: 140px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: var(--ficde-naranja);
+            padding: 5px;
+            box-shadow: 0 10px 25px rgba(230, 129, 97, 0.5);
+            cursor: pointer;
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .fede-avatar-large:hover { transform: scale(1.1); }
+
+        .fede-avatar-large img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid white;
+        }
+
+        .blocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .block-card {
+            background: var(--tarjeta-bg);
+            padding: 30px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .block-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--ficde-naranja);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .block-icon {
+            font-size: 3rem; margin-bottom: 15px;
+            background: rgba(19, 66, 82, 0.1);
+            width: 70px; height: 70px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; color: var(--ficde-azul-dark);
+        }
+
+        .block-title { color: var(--ficde-azul-dark); font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; }
+
+        .block-desc { 
+            color: var(--texto-secundario); 
+            font-size: 0.9rem; 
+            line-height: 1.5; 
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .activity-screen {
+            display: none;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .activity-screen.active { display: grid; }
+
+        .tutor-sidebar {
+            background: var(--ficde-azul-light);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            position: sticky; top: 20px;
+        }
+
+        .tutor-bubble {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--ficde-azul-dark);
+            margin-top: 20px;
+            position: relative;
+            text-align: left;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .tutor-bubble::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            border-width: 0 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent rgba(255,255,255,0.95);
+            transform: translateX(-50%);
+        }
+
+        .activity-content {
+            background: var(--tarjeta-bg);
+            padding: 40px;
+            border-radius: 16px;
+            min-height: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .act-badge {
+            background: var(--ficde-naranja);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .act-title { font-size: 1.8rem; color: var(--ficde-azul-dark); margin: 15px 0; font-weight: 800; }
+
+        .act-instruction { 
+            font-size: 1.1rem; 
+            color: var(--texto-secundario); 
+            margin-bottom: 30px; 
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .student-input {
+            width: 100%;
+            height: 150px;
+            padding: 20px;
+            background: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: var(--ficde-azul-dark);
+            transition: all 0.3s;
+        }
+
+        .student-input:focus { background: white; border-color: var(--ficde-naranja); outline: none; }
+
+        .fill-input {
+            border: none;
+            border-bottom: 2px solid var(--ficde-naranja);
+            background: transparent;
+            font-weight: 700;
+            color: var(--ficde-azul-dark);
+            text-align: center;
+            width: 150px;
+            font-size: 1.1rem;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 18px;
+            margin-top: 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            background: linear-gradient(90deg, var(--ficde-naranja), #ff9f85);
+            color: white;
+            box-shadow: 0 6px 20px rgba(230, 129, 97, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-action:hover { transform: translateY(-3px); }
+
+        .btn-back {
+            background: transparent;
+            color: var(--texto-secundario);
+            box-shadow: none;
+            border: 2px solid #ccc;
+            margin-top: 15px;
+        }
+
+        .btn-back:hover { background: #e0e0e0; color: var(--ficde-azul-dark); }
+
+        .traffic-row, .checklist-item {
+            background: white;
+            margin-bottom: 12px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .traffic-row:hover, .checklist-item:hover { border-color: var(--ficde-naranja); transform: translateX(5px); }
+
+        .traffic-btn {
+            width: 35px; height: 35px;
+            border-radius: 50%; border: 2px solid #ddd;
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .traffic-btn.active { opacity: 1; transform: scale(1.2); border-color: var(--ficde-azul-dark); }
+
+        .bg-green { background: #4CAF50; }
+
+        .bg-yellow { background: #FFC107; }
+
+        .bg-red { background: #f44336; }
+
+        .check-box {
+            width: 24px; height: 24px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .checklist-item.selected { border-color: var(--ficde-naranja); background: #fff5f0; }
+
+        .checklist-item.selected .check-box { background: var(--ficde-naranja); border-color: var(--ficde-naranja); color: white; }
+
+        .feedback-area {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            display: none;
+            animation: slideUp 0.4s;
+        }
+
+        .feedback-success { background: var(--verde-bg); color: #1b5e20; border-left: 6px solid var(--verde-exito); }
+
+        .feedback-retry { background: var(--naranja-bg); color: #bf360c; border-left: 6px solid #ef6c00; }
+
+        .feedback-fail { background: #cfd8dc; color: #37474f; border-left: 6px solid #455a64; }
+
+        #musicToggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--ficde-naranja);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .activity-screen { grid-template-columns: 1fr; }
+            .tutor-sidebar { display: flex; align-items: center; gap: 20px; }
+            .fede-avatar-large { width: 80px; height: 80px; }
+            .tutor-bubble::after { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- AUDIOS MP3 -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="chill-study-desk-focus-concentration-lofi-451180.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="saludoInicial" preload="auto" src="saludoinicial.mp3"></audio>
+    <audio id="mensaje1Ejercicios" preload="auto" src="mensaje1ejercicios.mp3"></audio>
+    <audio id="mensaje2Ejercicios" preload="auto" src="mensaje2ejercicios.mp3"></audio>
+    <audio id="mensaje3Ejercicios" preload="auto" src="mensaje3ejercicios.mp3"></audio>
+    <audio id="mensaje4Ejercicios" preload="auto" src="mensaje4ejercicios.mp3"></audio>
+    <audio id="respuestaCorrecta" preload="auto" src="respuestacorrecta.mp3"></audio>
+    <audio id="primerError" preload="auto" src="primererror.mp3"></audio>
+    <audio id="segundoError" preload="auto" src="segundoerror.mp3"></audio>
+    <audio id="loLograste" preload="auto" src="lolograste.mp3"></audio>
+
+    <audio id="hoverSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.m4a"></audio>
+    <audio id="clickSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.m4a"></audio>
+    <audio id="successSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.m4a"></audio>
+
+    <button id="musicToggle" onclick="toggleMusic()">🔇</button>
+
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="FICDE" class="logo-img" onerror="this.style.display='none'; document.getElementById('altLogo').style.display='block'">
+                <h2 id="altLogo" style="display:none; color:white; font-weight:800;">FICDE</h2>
+            </div>
+            <div class="module-tag">Módulo: 3 PROTOCOLOS INTEGRALES Y APLICACIONES PRÁCTICAS</div>
+        </header>
+
+        <div id="selectionScreen">
+            <div class="welcome-card">
+                <div class="fede-avatar-large" onclick="playAudio('saludoInicial')">
+                    <img src="personaje.gif" alt="Fede">
+                </div>
+                <h1 class="welcome-title">Espacio de Repaso Interactivo</h1>
+                <p style="color: var(--texto-secundario); font-size: 1.1rem;">Donde el conocimiento se convierte en acción</p>
+            </div>
+
+            <div class="blocks-grid">
+                <div class="block-card" onclick="startModule('sintesis')">
+                    <div class="block-icon">🧠</div>
+                    <div class="block-title">Síntesis</div>
+                    <div class="block-desc">Diseño y desarrollo de sesiones integrales de reflexología, incluyendo valoración inicial, ambientación, técnicas manuales, protocolos por zonas y sistemas, dosificación de los estímulos y cierre de la sesión.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('analisis')">
+                    <div class="block-icon">🔍</div>
+                    <div class="block-title">Análisis Crítico</div>
+                    <div class="block-desc">Errores y riesgos en sesiones integrales de reflexología relacionados con la valoración y contraindicaciones, intensidad y secuencia de las técnicas, uso seguro de aceites esenciales, respeto del tratamiento médico, criterios de derivación y cuidados posteriores.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('escenarios')">
+                    <div class="block-icon">🎬</div>
+                    <div class="block-title">Escenarios</div>
+                    <div class="block-desc">Abordaje y adaptación de sesiones de reflexología ante distintas condiciones y síntomas, contemplando precauciones, respuesta emocional, seguimiento y criterios de derivación profesional.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('practica')">
+                    <div class="block-icon">⚡</div>
+                    <div class="block-title">Práctica</div>
+                    <div class="block-desc">Secuencia práctica de una sesión integral de reflexología, incluyendo higiene y preparación, técnicas de presión y masaje, protocolos podales y manuales, aromaterapia, respiración consciente y maniobras de cierre.</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="activityScreen" class="activity-screen">
+            <div class="tutor-sidebar">
+                <div class="fede-avatar-large" style="width: 100px; height: 100px; border-color: var(--ficde-naranja);" onclick="replayTutorMessage()">
+                    <img src="personaje.gif" alt="Fede">
+                </div>
+                <div style="flex:1;">
+                    <h3 style="color:var(--ficde-naranja); margin-bottom:5px;">Tutor Fede</h3>
+                    <div class="tutor-bubble" id="tutorMessage"></div>
+                </div>
+            </div>
+
+            <div class="activity-content" id="activityContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== GESTIÓN DE AUDIO MP3 =====
+        const audioFiles = {
+            saludoInicial: document.getElementById('saludoInicial'),
+            mensaje1: document.getElementById('mensaje1Ejercicios'),
+            mensaje2: document.getElementById('mensaje2Ejercicios'),
+            mensaje3: document.getElementById('mensaje3Ejercicios'),
+            mensaje4: document.getElementById('mensaje4Ejercicios'),
+            correcto: document.getElementById('respuestaCorrecta'),
+            error1: document.getElementById('primerError'),
+            error2: document.getElementById('segundoError'),
+            lolograste: document.getElementById('loLograste')
+        };
+
+        function playAudio(audioKey) {
+            if (audioFiles[audioKey]) {
+                audioFiles[audioKey].currentTime = 0;
+                audioFiles[audioKey].play().catch(err => console.log('Error al reproducir audio:', err));
+            }
+        }
+
+        const bgMusic = document.getElementById('bgMusic');
+        const clickSoundEl = document.getElementById('clickSound');
+        const successSoundEl = document.getElementById('successSound');
+        const hoverSoundEl = document.getElementById('hoverSound');
+
+        let musicOn = false;
+        let audioUnlocked = false;
+
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            Object.values(audioFiles).forEach(a => {
+                a.volume = 0;
+                const p = a.play();
+                if (p) p.then(() => { a.pause(); a.currentTime = 0; a.volume = 1; }).catch(()=>{});
+            });
+            audioUnlocked = true;
+        }
+
+        document.addEventListener('pointerdown', unlockAudio, { once: true });
+        document.addEventListener('keydown', unlockAudio, { once: true });
+
+        function toggleMusic() {
+            unlockAudio();
+            if (!musicOn) {
+                bgMusic.volume = 0.1;
+                bgMusic.play().catch(() => {});
+                document.getElementById('musicToggle').innerText = '🎵';
+            } else {
+                bgMusic.pause();
+                document.getElementById('musicToggle').innerText = '🔇';
+            }
+            musicOn = !musicOn;
+        }
+
+        function playSound(type) {
+            if (!audioUnlocked) return;
+            try {
+                if (type === 'click') { clickSoundEl.currentTime=0; clickSoundEl.volume=0.8; clickSoundEl.play().catch(()=>{}); }
+                if (type === 'success') { successSoundEl.currentTime=0; successSoundEl.volume=0.8; successSoundEl.play().catch(()=>{}); }
+                if (type === 'hover') { hoverSoundEl.currentTime=0; hoverSoundEl.volume=0.2; hoverSoundEl.play().catch(()=>{}); }
+            } catch (e) {}
+        }
+
+        function wireUiSounds() {
+            document.querySelectorAll('.block-card, .btn-action, .checklist-item, .traffic-row, .fede-avatar-large').forEach(el => {
+                if (el.dataset.sound === '1') return;
+                el.dataset.sound = '1';
+                el.addEventListener('mouseenter', () => playSound('hover'));
+                el.addEventListener('click', () => playSound('click'));
+            });
+        }
+
+        window.addEventListener('load', wireUiSounds);
+
+        // ===== NORMALIZACIÓN DE TEXTO =====
+        function normalizar(txt) {
+            return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        // ===== ACTIVIDADES =====
+        const modules = {
+            sintesis: [
+                {
+                    type: 'text',
+                    badge: "Enfoque terapéutico",
+                    title: "Diseño de sesiones integrales",
+                    instruction: "Define el concepto de sesión integral en reflexología explicando su abordaje holístico y humanizado.",
+                    tutor: "Considera la atención conjunta del estado físico, mental y emocional para favorecer el equilibrio.",
+                    explanation: "El enfoque holístico evalúa la integralidad del paciente para activar la autorregulación y restaurar el bienestar general.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["holist", "autorr", "bienes", "enfoqu", "evalua", "integr", "pacien", "activa", "restau", "genera"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'text',
+                    badge: "Estructura de la sesión",
+                    title: "Fases del protocolo integral",
+                    instruction: "Clasifica las etapas de inicio, apertura y cierre que componen una sesión reflexológica completa.",
+                    tutor: "Repasa la secuencia desde la preparación con aromas hasta el trabajo metacarpiano y la respiración final.",
+                    explanation: "La sesión contempla el inicio preparatorio, la apertura articular y el cierre relajante con respiración consciente.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["inicio", "apertu", "cierre", "sesion", "contem", "prepar", "articu", "relaja", "respir", "consci"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Plano emocional",
+                    title: "Correspondencia de los dedos",
+                    instruction: "Selecciona las tres asociaciones emocionales correctas correspondientes al pulgar, índice y anular según el manual.",
+                    items: [
+                        { text: "Pulgar asociado a preocupación y ansiedad", correct: true },
+                        { text: "Índice vinculado al sentimiento de miedo", correct: true },
+                        { text: "Anular relacionado con tristeza y depresión", correct: true },
+                        { text: "Dedo medio asociado exclusivamente al esfuerzo físico", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Identifica los estados emocionales específicos que se armonizan sujetando cada dedo de la mano.",
+                    explanation: "Sujetar el pulgar calma la ansiedad, el índice disipa el miedo y el anular alivia la tristeza."
+                },
+                {
+                    type: 'text',
+                    badge: "Entorno de trabajo",
+                    title: "Ambientación y ergonomía",
+                    instruction: "Detalla las pautas de confort y postura ergonómica requeridas para el terapeuta y el consultante.",
+                    tutor: "Analiza el uso de almohadas o cojines para evitar esfuerzos innecesarios y optimizar el descanso.",
+                    explanation: "Mantener una postura ergonómica adecuada brinda confort continuo y asegura el apoyo corporal óptimo.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["postur", "confor", "apoyo", "manten", "ergono", "adecua", "brinda", "contin", "asegur", "corpor"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Estimulación sensorial",
+                    title: "Aromaterapia complementaria",
+                    instruction: "Completar la frase<br><br>El aceite esencial de _______ se utiliza para calmar el sistema nervioso mientras que el de _________ aporta vitalidad y abre las vías respiratorias.",
+                    blanks: ["lavanda", "eucalipto"],
+                    tutor: "Recuerda la esencia floral asociada a la relajación profunda y la esencia herbal de acción fresca y activadora.",
+                    explanation: "Aplicar lavanda induce un descanso profundo mientras el eucalipto brinda frescura y activación respiratoria."
+                },
+                {
+                    type: 'text',
+                    badge: "Valoración inicial",
+                    title: "Observación integral del consultante",
+                    instruction: "Expone los cuatro parámetros que deben evaluarse de forma visual y táctil antes de iniciar el tratamiento.",
+                    tutor: "Agrupa la inspección de la textura cutánea, variaciones de calor, flexibilidad tisular y estado de las uñas.",
+                    explanation: "Examinar la piel, registrar la temperatura palmar y verificar el tono muscular orienta la observación.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["piel", "temper", "tono", "examin", "regist", "palmar", "verifi", "muscul", "orient", "observ"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Exploración podal",
+                    title: "Siete zonas clave obligatorias",
+                    instruction: "Identifica las tres zonas fundamentales que deben examinarse inicialmente comenzando por el pie derecho.",
+                    items: [
+                        { text: "Cabeza y columna vertebral", correct: true },
+                        { text: "Plexo solar y suprarrenales", correct: true },
+                        { text: "Riñones y zonas gonadales", correct: true },
+                        { text: "Músculo cuadriceps e inserción femoral", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Busca los puntos de la rutina obligatoria previa al abordaje de cualquier dolencia específica.",
+                    explanation: "Examinar la cabeza, testear el plexo solar y recorrer riñones constituye la exploración inicial."
+                },
+                {
+                    type: 'text',
+                    badge: "Dosificación del estímulo",
+                    title: "Parámetros de aplicación",
+                    instruction: "Describe los tiempos de masaje por punto, número de repeticiones y duración mínima de una sesión.",
+                    tutor: "Considera el estímulo de 60 segundos por zona, repetido de 4 a 7 veces en sesiones de al menos 20 minutos.",
+                    explanation: "Masajear un minuto por punto realizar varias repeticiones garantiza la efectividad de la sesión.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["minuto", "repeti", "sesion", "masaje", "punto", "realiz", "varias", "garant", "efecti", "descri"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Técnicas de presión",
+                    title: "Maniobras de estimulación",
+                    instruction: "Marca afirmaciones correctas",
+                    items: [
+                        { text: "La técnica de la oruga realiza un avance milimétrico flexionando la primera articulación del pulgar a 90°", color: "green" },
+                        { text: "La presión fija se aplica sobre puntos anómalos manteniendo la compresión por 5 minutos continuos", color: "red" },
+                        { text: "La técnica de gancho efectúa una presión profunda enganchando el punto hacia la palma", color: "green" },
+                        { text: "Los movimientos circulares se ejecutan con herramientas metálicas puntiagudas para mayor penetración", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Contrasta la caminata milimétrica del pulgar y el enganche palmar con la duración y herramientas de presión.",
+                    explanation: "Ejecutar la oruga con flexión justa y aplicar gancho profundo estimula los puntos reflejos."
+                },
+                {
+                    type: 'text',
+                    badge: "Punto focalizado",
+                    title: "Pique Unión del Valle",
+                    instruction: "Sintetiza la localización y beneficio clínico de la digitopresión en el punto Unión del Valle.",
+                    tutor: "Ubica la membrana carnosa entre el pulgar e índice indicada para aliviar dolores musculares y tensionales.",
+                    explanation: "Presionar el pliegue interdigital mediante digitopresión brinda un alivio efectivo ante cefaleas tensionales.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["pliegu", "digito", "cefale", "presio", "interd", "median", "brinda", "alivio", "efecti", "ante"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                }
+            ],
+            analisis: [
+                {
+                    type: 'text',
+                    badge: "Límites éticos",
+                    title: "Sustitución de diagnóstico médico",
+                    instruction: "Examina los riesgos legales y profesionales de pretender reemplazar el diagnóstico médico con la reflexología.",
+                    tutor: "Reflexiona sobre el carácter complementario de la técnica y la prohibición de emitir juicios clínicos.",
+                    explanation: "Emitir un diagnóstico o pretender el reemplazo médico constituye una falta grave a la responsabilidad profesional.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["diagno", "reempl", "respon", "emitir", "preten", "medico", "consti", "falta", "grave", "profes"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'text',
+                    badge: "Contraindicaciones críticas",
+                    title: "Masaje en cuadros vascularizados",
+                    instruction: "Evalúa el peligro extremo de aplicar masaje centrípeto o presiones en pacientes con flebitis o trombosis.",
+                    tutor: "Contempla la posibilidad de desprender un trombo estático y movilizarlo hacia la circulación general.",
+                    explanation: "Presionar sobre una trombosis puede desprendes un coágulo y desplazarlo peligrosamente por el torrente sanguíneo.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["coagul", "trombo", "torren", "presio", "puede", "despre", "despla", "peligr", "sangui", "evalua"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Manejo de la intensidad",
+                    title: "Dolor punzante y sobreestimulación",
+                    instruction: "Escoge las tres consecuencias operativas negativas de aplicar una presión excesivamente dolorosa sobre puntos álgicos.",
+                    items: [
+                        { text: "Inducción de defensa muscular e hipertensión", correct: true },
+                        { text: "Saturación del sistema nervioso del consultante", correct: true },
+                        { text: "Bloqueo de la respuesta neurofisiológica de relajación", correct: true },
+                        { text: "Aceleración inmediata de la curación de la patología", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Identifica cómo el dolor desmedido activa el estrés en lugar de promover la autorregulación.",
+                    explanation: "Ejercer presión excesiva genera defensa muscular, satura el sistema nervioso y frena la relajación."
+                },
+                {
+                    type: 'text',
+                    badge: "Omisión de anclaje",
+                    title: "Trabajo sin plexo solar",
+                    instruction: "Explica los inconvenientes de iniciar la sesión omitiendo la compresión y respiración guiada en el plexo solar.",
+                    tutor: "Considera la falta de inducción al descanso consciente y la dificultad para centrar la energía del paciente.",
+                    explanation: "Omitir el anclaje en el plexo favorece la dispersión mental y dificulta liberar la tensión acumulada.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["anclaj", "disper", "tensio", "omitir", "plexo", "favore", "mental", "dificu", "libera", "acumul"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Riesgos aromáticos",
+                    title: "Aplicación de aceites esenciales",
+                    instruction: "Completar la frase<br><br>Aplicar aceites esenciales sin verificar alergias previas provoca irritación en la _____ y puede desencadenar reacciones en el sistema ____________.",
+                    blanks: ["piel", "respiratorio"],
+                    tutor: "Piensa en los efectos cutáneos inmediatos y las complicaciones por inhalación de aromas concentrados.",
+                    explanation: "Ignorar la sensibilidad cutánea daña la piel y genera complicaciones en el sistema respiratorio del consultante."
+                },
+                {
+                    type: 'text',
+                    badge: "Errores de secuencia",
+                    title: "Inversión en el protocolo digestivo",
+                    instruction: "Juzga las complicaciones intestinales que surgen al masajear el colon en sentido contrario al tránsito anatómico.",
+                    tutor: "Observa cómo presionar a la inversa del colon ascendente, transverso y descendente entorpece la evacuación.",
+                    explanation: "Alterar la ruta del tránsito intestinal favorece la retención fecal generando malestar abdominal al paciente.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["transi", "retenc", "malest", "altera", "ruta", "intest", "favore", "fecal", "genera", "abdomi"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Falta de derivación",
+                    title: "Dolor álgico persistente",
+                    instruction: "Señala las conductas incorrectas del terapeuta cuando la sensibilidad en una zona refleja no cede tras varias sesiones.",
+                    items: [
+                        { text: "Insistir aumentando la fuerza de compresión", correct: true },
+                        { text: "Ignorar el dolor y continuar sin registrar cambios", correct: true },
+                        { text: "Recomendar la consulta urgente con el médico de cabecera", correct: false },
+                        { text: "Atribuir el dolor a una crisis curativa permanente", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Detecta las actitudes imprudentes que omiten la consulta médica profesional correspondiente.",
+                    explanation: "Aumentar la fuerza, ignorar el dolor o justificar la molestia omite la necesaria derivación médica."
+                },
+                {
+                    type: 'text',
+                    badge: "Lesiones articulares",
+                    title: "Manipulación en procesos agudos",
+                    instruction: "Argumenta por qué no se deben realizar tracciones ni movimientos bruscos sobre articulaciones inflamadas.",
+                    tutor: "Analiza el riesgo de agravar cuadros de artritis o esguinces por sobrepasar el límite fisiológico.",
+                    explanation: "Manipular una articulación con inflamación aguda agrava el edema y provoca daño tisular.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["inflam", "articu", "dano", "manipu", "aguda", "agrava", "edema", "provoc", "tisula", "argume"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Cuidados posteriores",
+                    title: "Recomendaciones post-sesión",
+                    instruction: "Marca afirmaciones correctas",
+                    items: [
+                        { text: "Recomendar la ingesta abundante de agua post-sesión facilita la evacuación de toxinas liberadas", color: "green" },
+                        { text: "Es aconsejable realizar ejercicios físicos de alto impacto inmediatamente después de la sesión", color: "red" },
+                        { text: "Advertir sobre posible cansancio o aumento de diuresis informa al paciente sobre la", color: "green" },
+                        { text: "Indicar el consumo de bebidas alcohólicas ayuda a fijar el efecto relajante del tratamiento", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Asocia la hidratación y el reposo con la eliminación de deshechos metabólicos tras el masaje.",
+                    explanation: "Promover la hidratación con agua y el reposo adecuado optimiza la eliminación de toxinas."
+                },
+                {
+                    type: 'text',
+                    badge: "Embarazo inicial",
+                    title: "Precaución en el primer trimestre",
+                    instruction: "Sopesa los riesgos de masajear zonas reflejas pélvicas y uterinas durante las primeras doce semanas de gestación.",
+                    tutor: "Considera la sensibilidad hormonal y el peligro de desencadenar estímulos que comprometan el embarazo.",
+                    explanation: "Estimular el reflejo del útero durante la gestación inicial puede inducir contracciones no deseadas.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["gestac", "utero", "contra", "estimu", "reflej", "durant", "inicia", "puede", "induci", "desead"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                }
+            ],
+            escenarios: [
+                {
+                    type: 'text',
+                    badge: "Cuadro de ansiedad",
+                    title: "Intervención en estrés agudo",
+                    instruction: "Plantea la estrategia reflexológica para calmar a un consultante con sobrecarga mental e hiperhiperventilación.",
+                    tutor: "Combina la sujeción del pulgar, la compresión sosteniéndola en el plexo solar y la aromaterapia de lavanda.",
+                    explanation: "Sujetar el pulgar, presionar el plexo e integrar la respiración profunda calma la ansiedad.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["pulgar", "plexo", "respir", "sujeta", "presio", "integr", "profun", "calma", "ansied", "plante"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Cefaleas vasculares",
+                    title: "Migrañas de origen hepático",
+                    instruction: "Marca afirmaciones correctas",
+                    items: [
+                        { text: "El tratamiento de migrañas debe incluir la estimulación del reflejo del hígado por su rol depurador", color: "green" },
+                        { text: "Se debe evitar presionar la zona de la cabeza en el dedo gordo si hay dolor de sien", color: "red" },
+                        { text: "Trabajar el punto clave Unión del Valle ayuda a disipar la tensión acumulada en la cabeza", color: "green" },
+                        { text: "La reflexología debe garantizar la cura definitiva de la migraña en la primera sesión", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Relaciona la función depurativa del hígado y el punto interdigital con el alivio de las cefaleas.",
+                    explanation: "Estimular el hígado y el punto Unión del Valle alivia la cefalea de origen metabólico."
+                },
+                {
+                    type: 'text',
+                    badge: "Tránsito lento",
+                    title: "Abordaje del estreñimiento",
+                    instruction: "Diseña la ruta de trabajo en pies para una persona con digestión pesada y evacuación irregular.",
+                    tutor: "Detalla el recorrido desde el ciego y válvula ileocecal en pie derecho hasta el colon descendente e izquierdo.",
+                    explanation: "Recorrer el colon respetando la válvula ileocecal y el sentido anatómico activa la evacuación.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["colon", "valvul", "sentid", "recorr", "respet", "ileoce", "anatom", "activa", "evacua", "disena"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Algias vertebrales",
+                    title: "Dolor en zona lumbar y ciática",
+                    instruction: "Distingue las tres zonas reflejas indispensables para tratar a un consultante con ciatalgia.",
+                    items: [
+                        { text: "Columna lumbar en el borde interno", correct: true },
+                        { text: "Nervio ciático debajo del talón", correct: true },
+                        { text: "Suprarrenales y riñones", correct: true },
+                        { text: "Almohadillas carnosas de los dedos 2 y 3", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Agrupa el reflejo de la estructura ósea, la trayectoria nerviosa en el talón y los puntos antiinflamatorios.",
+                    explanation: "Trabajar la columna lumbar, el reflejo del ciático y las suprarrenales calma la inflamación."
+                },
+                {
+                    type: 'text',
+                    badge: "Trastornos del sueño",
+                    title: "Insomnio y agotamiento",
+                    instruction: "Ilustra la combinación de puntos endocrinos y nerviosos para favorecer el descanso nocturno.",
+                    tutor: "Combina el trabajo en la bóveda craneal, la glándula maestra en el dedo gordo y la ambientación serena.",
+                    explanation: "Estimular la hipófisis, recorrer la cabeza y usar lavanda induce un sueño reparador.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["hipofi", "cabeza", "lavand", "estimu", "recorr", "usar", "induce", "sueno", "repara", "ilustr"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Salud femenina",
+                    title: "Molestias premenstruales",
+                    instruction: "Marca afirmaciones correctas",
+                    items: [
+                        { text: "El trabajo en zonas reflejas de útero y gónadas alivia los espasmos y dolores menstruales", color: "green" },
+                        { text: "Está prohibido realizar reflexología durante los días de sangrado menstrual en mujeres adultas", color: "red" },
+                        { text: "Estimular el sistema linfático ayuda a reducir la retención de líquidos y la hinchazón pélvica", color: "green" },
+                        { text: "Las presiones en caso de dolor menstrual deben aplicarse con herramientas de madera rrígida", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Considera la acción sedante sobre el aparato reproductor y el drenaje de líquidos en el ciclo.",
+                    explanation: "Tratar el útero, activar el sistema linfático y adaptar la presión disminuye la hinchazón."
+                },
+                {
+                    type: 'text',
+                    badge: "Cuadro respiratorio",
+                    title: "Asma y congestión",
+                    instruction: "Desglosa la secuencia podal para un consultante con dificultad respiratoria y tensión pectoral.",
+                    tutor: "Pauta el trabajo en las almohadillas debajo de los dedos, puntos suprarrenales y difusión de eucalipto.",
+                    explanation: "Masajear los pulmones, despejar los bronquios e inhalar eucalipto mejora la oxigenación.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["pulmon", "eucali", "bronqu", "masaje", "despej", "inhala", "mejora", "oxigen", "desglo", "secuen"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Dispositivos implantados",
+                    title: "Paciente con marcapasos",
+                    instruction: "Reúne los cuidados obligatorios al atender a una persona con afección cardíaca o marcapasos.",
+                    items: [
+                        { text: "Mantener un estímulo suave y de corta duración", correct: true },
+                        { text: "Evitar maniobras bruscas o presiones dolorosas", correct: true },
+                        { text: "Omitir el uso de corrientes o aparatos eléctricos", correct: true },
+                        { text: "Aplicar fricciones enérgicas en la zona del corazón", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Busca las precauciones que evitan alterar el ritmo cardíaco o interferir con el dispositivo.",
+                    explanation: "Aplicar estimulación suave, evitar presiones bruscas y descartar aparatos protege al paciente."
+                },
+                {
+                    type: 'text',
+                    badge: "Catarsis emocional",
+                    title: "Manejo de la liberación de llanto",
+                    instruction: "Expón la conducta profesional ante un paciente que experimenta una descarga emocional durante el masaje.",
+                    tutor: "Apoya el proceso sin juzgar, sostén un punto de anclaje neutro y brinda tiempo para recuperar la calma.",
+                    explanation: "Ofrecer contención, respetar el espacio y mantener silencio valida la emoción del consultante.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["conten", "espaci", "silenc", "ofrece", "respet", "manten", "valida", "emocio", "consul", "expon"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Alerta en gabinete",
+                    title: "Hallazgo de punto renal muy álgico",
+                    instruction: "Marca afirmaciones correctas",
+                    items: [
+                        { text: "Un dolor punzante e insoportable en el reflejo renal indica una posible congestión que requiere prudencia", color: "green" },
+                        { text: "Ante un dolor álgico agudo se debe golpear la zona con el nudillo para romper el bloqueo", color: "red" },
+                        { text: "Se debe reducir la intensidad, aplicar presión fija suave y sugerir la consulta médica", color: "green" },
+                        { text: "El dolor punzante en el pie confirma de forma matemática la presencia de cálculos renales", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Pondera la moderación del estímulo sobre puntos hiperalgesicos y la sugerencia de evaluación médica.",
+                    explanation: "Reducir la intensidad, aplicar presión suave y sugerir la consulta médica resguarda la salud."
+                }
+            ],
+            practica: [
+                {
+                    type: 'checklist',
+                    badge: "Preparación del pie",
+                    title: "Higiene y calentamiento inicial",
+                    instruction: "Elige los tres pasos constitutivos del protocolo de preparación podal antes de la exploración.",
+                    items: [
+                        { text: "Limpieza completa de los pies con alcohol", correct: true },
+                        { text: "Fricciones y amasamientos de calentamiento", correct: true },
+                        { text: "Movilizaciones articulares de tobillo y dedos", correct: true },
+                        { text: "Aplicación de parafina caliente sobre la planta", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Agrupa la desinfección cutánea, la activación de la temperatura y la flexibilización articular.",
+                    explanation: "Higienizar con alcohol, aplicar calentamiento y realizar movilizaciones prepara el pie."
+                },
+                {
+                    type: 'text',
+                    badge: "Inducción inicial",
+                    title: "Anclaje en plexo solar",
+                    instruction: "Instruye paso a paso la maniobra de anclaje inicial en el plexo solar en ambos pies simultáneamente.",
+                    tutor: "Pauta la colocación de pulgares en el punto, la presión durante la inspiración y el alivio en la exhalación.",
+                    explanation: "Ejercer compresión al inhalar y acompañar la respiración del paciente durante la exhalación ancla la sesión.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["compre", "respir", "exhala", "ejerce", "inhala", "acompa", "pacien", "durant", "ancla", "sesion"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Técnica reina",
+                    title: "Ejecución de la oruga",
+                    instruction: "Completar la frase<br><br>La caminata de la oruga requiere apoyar el pulgar plano, doblar la articulación a _______ grados para presionar y realizar un avance ___________ sin clavar la uña.",
+                    blanks: ["noventa", "milimétrico"],
+                    tutor: "Recuerda el ángulo recto de la falange distal y el desplazamiento muy corto sobre el tejido.",
+                    explanation: "Doblar el pulgar a noventa grados y realizar un avance milimétrico garantiza una oruga técnica."
+                },
+                {
+                    type: 'traffic',
+                    badge: "Maniobras fijas",
+                    title: "Presión y rotación circular",
+                    instruction: "Marca afirmaciones correctas",
+                    items: [
+                        { text: "La presión fija se sostiene durante aproximadamente 12 segundos sobre el punto sensible", color: "green" },
+                        { text: "Los movimientos circulares deben frotar la piel hasta generar irritación por fricción rápida", color: "red" },
+                        { text: "La rotación busca pulverizar simbólicamente los granitos o depósitos detectados en el punto", color: "green" },
+                        { text: "Ambas técnicas requieren levantar el pulgar del pie tras cada segundo de contacto", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Analiza el tiempo de sostenimiento de la presión estática y la intención del movimiento circular.",
+                    explanation: "Sostener la presión doce segundos y realizar rotación concentrada disipa los puntos álgicos."
+                },
+                {
+                    type: 'text',
+                    badge: "Estimulación profunda",
+                    title: "Técnica de gancho",
+                    instruction: "Prescribe la ejecución de la técnica de gancho en la zona de las glándulas suprarrenales.",
+                    tutor: "Detalla el ingreso del pulgar en profundidad y la tracción retrógrada hacia la base de la mano o talón.",
+                    explanation: "Ingresar con profundidad y realizar el enganche en la zona permite aplicar el gancho reflexológico.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["gancho", "enganc", "profun", "ingres", "realiz", "zona", "permit", "aplica", "reflex", "prescr"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Recorrido orgánico",
+                    title: "Protocolo digestivo en pies",
+                    instruction: "Determina el orden de ejecución para masajear el tracto digestivo comenzando por el pie derecho.",
+                    items: [
+                        { text: "Estómago y duodeno en ambos pies", correct: true },
+                        { text: "Hígado y vesícula biliar en pie derecho", correct: true },
+                        { text: "Colon ascendente", correct: true },
+                        { text: "transverso y descendente", correct: true },
+                        { text: "Bazo y páncreas únicamente en pie derecho", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Busca las zonas que respetan la ubicación de las vísceras y el sentido del tránsito intestinal.",
+                    explanation: "Masajear el estómago, estimular el hígado en el pie derecho y recorrer el colon completa la pauta."
+                },
+                {
+                    type: 'text',
+                    badge: "Vaciado de líquidos",
+                    title: "Drenaje linfático podal",
+                    instruction: "Guía la realización del drenaje linfático podal para favorecer la eliminación de edemas.",
+                    tutor: "Pauta los suaves bombeos en la zona de la vejiga y los pases ascendentes por el empeine hacia los maléolos.",
+                    explanation: "Aplicar bombeo suave y ascender por el empeine hacia los maléolos drena los líquidos.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["bombeo", "empein", "maleol", "aplica", "suave", "ascend", "drena", "liquid", "guia", "realiz"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Abordaje manual",
+                    title: "Apertura y amasamiento palmar",
+                    instruction: "Marca afirmaciones correctas",
+                    items: [
+                        { text: "La apertura de metacarpos estira suavemente la estructura ósea de la palma antes del masaje", color: "green" },
+                        { text: "El amasamiento de las eminencias tenar e hipotenar debe realizarse con pellizcos enérgicos y veloces", color: "red" },
+                        { text: "La rotación articular de los dedos favorece la movilidad y prepara los tejidos de la mano", color: "green" },
+                        { text: "La reflexología manual prescinde totalmente del uso de cremas o aceites de deslizamiento", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Considera la flexibilización de la palma y las maniobras de relajación en la masa muscular tenar.",
+                    explanation: "Realizar apertura metacarpiana, masajear la zona tenar y flexibilizar dedos suelta las manos."
+                },
+                {
+                    type: 'text',
+                    badge: "Integración aromática",
+                    title: "Aplicación de aceites en sesión",
+                    instruction: "Pauta el procedimiento para integrar la aromaterapia al inicio de la sesión mediante inhalación.",
+                    tutor: "Indica la colocación de 2 a 3 gotas en las palmas del terapeuta, frotado suave y presentación sobre la nariz.",
+                    explanation: "Frotar las gotas en las manos y guiarse por la inhalación aromática prepara los sentidos.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["gotas", "fricci", "inhala", "frotar", "manos", "guiars", "aromat", "prepar", "sentid", "pauta"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Finalización de sesión",
+                    title: "Cierre y desmovilización",
+                    instruction: "Compila los pasos finales para concluir el tratamiento reflexológico y reincorporar al consultante.",
+                    items: [
+                        { text: "Masajes suaves y caricias lentas hasta el codo", correct: true },
+                        { text: "Respiración final guiada con anclaje en plexo solar", correct: true },
+                        { text: "Reposo en camilla durante unos minutos antes de levantarse", correct: true },
+                        { text: "Salida inmediata y apresurada de la camilla sin pausa", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Agrupa las caricias de despedida, la integración respiratoria y el tiempo de reposo necesario.",
+                    explanation: "Aplicar caricias lentas, sellar con respiración y respetar el reposo concluye la sesión."
+                }
+            ]
+        };
+
+let currentModule = '';
+        let currentIndex = 0;
+        let attemptCount = 0;
+        let lastAudioModule = null;
+
+        // ===== MAPEO DE MÓDULOS A AUDIOS =====
+        const moduloAudioMap = {
+            'sintesis': 'mensaje1',
+            'analisis': 'mensaje2',
+            'escenarios': 'mensaje3',
+            'practica': 'mensaje4'
+        };
+
+        function startModule(id) {
+            playSound('click');
+            currentModule = id;
+            currentIndex = 0;
+            attemptCount = 0;
+            lastAudioModule = id;
+
+            // Reproducir el audio del módulo correspondiente
+            const audioKey = moduloAudioMap[id];
+            if (audioKey) {
+                playAudio(audioKey);
+            }
+
+            document.getElementById('selectionScreen').style.display = 'none';
+            document.getElementById('activityScreen').classList.add('active');
+
+            setTimeout(loadActivity, 300);
+        }
+
+        function loadActivity() {
+            attemptCount = 0;
+
+            if (currentIndex >= modules[currentModule].length) {
+                // Reproducir "lolograste.mp3" al terminar TODAS las preguntas
+                playAudio('lolograste');
+                playSound('success');
+                alert('¡Excelente! Completaste este bloque.');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+                return;
+            }
+
+            const data = modules[currentModule][currentIndex];
+            const container = document.getElementById('activityContainer');
+
+            const msg = `Pregunta ${currentIndex + 1} de ${modules[currentModule].length}: ${data.tutor}`;
+            document.getElementById('tutorMessage').innerText = msg;
+
+            let html = `<span class="act-badge">${data.badge}</span>
+                        <h2 class="act-title">${data.title}</h2>
+                        <p class="act-instruction">${data.instruction}</p>`;
+
+            if (data.type === 'text') {
+                html += `<textarea id="txtInput" class="student-input" placeholder="Escribe tu respuesta con tus palabras..."></textarea>`;
+            } else if (data.type === 'blanks') {
+                html += `<div style="font-size:1.2rem; line-height:2.5;">`;
+                data.blanks.forEach((b, i) => {
+                    html += `${i + 1}. <input type="text" class="fill-input" data-ans="${b}"> <br>`;
+                });
+                html += `</div>`;
+            } else if (data.type === 'traffic') {
+                data.items.forEach((item, i) => {
+                    html += `<div class="traffic-row" id="row-${i}">
+                                <span>${item.text}</span>
+                                <div style="display:flex; gap:10px;">
+                                    <div class="traffic-btn bg-green" onclick="selTraffic(${i}, 'green')"></div>
+                                    <div class="traffic-btn bg-yellow" onclick="selTraffic(${i}, 'yellow')"></div>
+                                    <div class="traffic-btn bg-red" onclick="selTraffic(${i}, 'red')"></div>
+                                </div>
+                            </div>`;
+                });
+            } else if (data.type === 'checklist') {
+                data.items.forEach((item) => {
+                    html += `<div class="checklist-item" onclick="toggleCheck(this)" data-correct="${item.correct}">
+                                <div class="check-box"></div>
+                                <span>${item.text}</span>
+                            </div>`;
+                });
+            }
+
+            html += `<div id="feedback" class="feedback-area"></div>
+                     <button id="btnCheck" class="btn-action" onclick="validate()">Verificar respuesta</button>
+                     <button class="btn-action btn-back" onclick="location.reload()">Salir al menú</button>`;
+
+            container.innerHTML = html;
+            wireUiSounds();
+        }
+
+        let trafficAns = {};
+
+        function selTraffic(idx, color) {
+            trafficAns[idx] = color;
+            const row = document.getElementById(`row-${idx}`);
+            row.querySelectorAll('.traffic-btn').forEach(b => b.classList.remove('active'));
+            row.querySelector(`.bg-${color}`).classList.add('active');
+            playSound('click');
+        }
+
+        function toggleCheck(el) {
+            el.classList.toggle('selected');
+            el.querySelector('.check-box').innerText = el.classList.contains('selected') ? '✓' : '';
+
+            if (el.classList.contains('selected')) {
+                el.style.borderColor = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.background = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.borderColor = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.color = 'white';
+            } else {
+                el.style.borderColor = 'transparent';
+                el.querySelector('.check-box').style.background = 'transparent';
+                el.querySelector('.check-box').style.borderColor = '#ccc';
+            }
+
+            playSound('click');
+        }
+
+        function validate() {
+            const data = modules[currentModule][currentIndex];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (data.type === 'text') {
+                const val = document.getElementById('txtInput').value;
+                isCorrect = data.validation(val);
+            } else if (data.type === 'blanks') {
+                const inputs = document.querySelectorAll('.fill-input');
+                let hits = 0;
+                let usedAnswers = [];
+                inputs.forEach(inp => {
+                    const v = normalizar(inp.value.trim());
+                    if (v.length > 0) {
+                        if (data.anyOrder) {
+                            const matchedIdx = data.blanks.findIndex((ans, idx) => {
+                                if (usedAnswers.includes(idx)) return false;
+                                const normAns = normalizar(ans.trim());
+                                return (normAns === v || (v.length > 1 && normAns.startsWith(v.slice(0, Math.max(2, Math.min(v.length, normAns.length))))));
+                            });
+                            if (matchedIdx !== -1) {
+                                hits++;
+                                usedAnswers.push(matchedIdx);
+                            }
+                        } else {
+                            const ans = normalizar(inp.dataset.ans.trim());
+                            if (ans === v || (v.length > 1 && ans.startsWith(v.slice(0, Math.max(2, Math.min(v.length, ans.length)))))) {
+                                hits++;
+                            }
+                        }
+                    }
+                });
+                isCorrect = (hits === data.blanks.length);
+            } else if (data.type === 'traffic') {
+                let hits = 0;
+                data.items.forEach((item, i) => { if (trafficAns[i] === item.color) hits++; });
+                isCorrect = (hits === data.items.length);
+            } else if (data.type === 'checklist') {
+                let correct = true;
+                document.querySelectorAll('.checklist-item').forEach(item => {
+                    const sel = item.classList.contains('selected');
+                    const should = item.dataset.correct === 'true';
+                    if (sel !== should) correct = false;
+                });
+                isCorrect = correct;
+            }
+
+            feedback.style.display = 'block';
+
+            if (isCorrect) {
+                playAudio('correcto');
+                playSound('success');
+                feedback.className = 'feedback-area feedback-success';
+                feedback.innerHTML = `<strong>¡Muy bien!</strong><br>${data.explanation}`;
+                document.getElementById('btnCheck').innerText = 'Siguiente pregunta →';
+                document.getElementById('btnCheck').onclick = () => { currentIndex++; loadActivity(); };
+            } else {
+                attemptCount++;
+
+                if (attemptCount < 2) {
+                    playAudio('error1');
+                    feedback.className = 'feedback-area feedback-retry';
+                    feedback.innerHTML = `<strong>Buen intento.</strong> Revisá tu respuesta. Pista: ${data.tutor}`;
+                } else {
+                    playAudio('error2');
+                    feedback.className = 'feedback-area feedback-fail';
+                    feedback.innerHTML = `<strong>No pasa nada, aprendamos juntos:</strong><br>${data.explanation}`;
+                    document.getElementById('btnCheck').innerText = 'Entendido, continuar →';
+                    document.getElementById('btnCheck').onclick = () => { currentIndex++; loadActivity(); };
+                }
+            }
+        }
+
+        function replayTutorMessage() {
+            // Replay del último audio de módulo reproducido
+            if (lastAudioModule) {
+                const audioKey = moduloAudioMap[lastAudioModule];
+                if (audioKey) {
+                    playAudio(audioKey);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
